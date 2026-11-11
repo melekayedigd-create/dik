@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#f6f3ec">
+<title>BoardLink</title>
+<link rel="icon" href="/icons/icon-192.png">
+<link rel="stylesheet" href="/tablet.css">
+</head>
+<body>
+<div id="app">
+  <!-- LEFT: drawing tools -->
+  <aside class="bar left">
+    <div class="logo" title="BoardLink">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><rect x="3" y="6" width="34" height="24" rx="5" fill="#fff" stroke="#1e2230" stroke-width="2.4"/><path d="M9 22c4-9 7 4 11-3s6-4 11 1" fill="none" stroke="#e4572e" stroke-width="3" stroke-linecap="round"/><circle cx="20" cy="35" r="2.6" fill="#e4572e"/></svg>
+    </div>
+    <p class="bar-label">Tools</p>
+    <div class="grid2" id="tools">
+      <button class="tbtn" data-tool="pen" data-icon="pen" title="Pen"><span>Pen</span></button>
+      <button class="tbtn" data-tool="highlighter" data-icon="highlighter" title="Highlighter"><span>Marker</span></button>
+      <button class="tbtn" data-tool="eraser" data-icon="eraser" title="Eraser"><span>Eraser</span></button>
+      <button class="tbtn" data-tool="text" data-icon="text" title="Insert text"><span>Text</span></button>
+      <button class="tbtn" data-tool="move" data-icon="move" title="Move / resize"><span>Move</span></button>
+      <label class="tbtn" data-icon="image" title="Insert an image"><span>Image</span><input type="file" id="imgInput" accept="image/*" hidden></label>
+    </div>
+    <p class="bar-label">Colour</p>
+    <div class="colors" id="colors"></div>
+    <p class="bar-label">Size</p>
+    <div class="sizes" id="sizes"></div>
+    <div class="spacer"></div>
+    <div class="grid2">
+      <button class="tbtn" id="undoBtn" data-icon="undo" title="Undo"><span>Undo</span></button>
+      <button class="tbtn" id="redoBtn" data-icon="redo" title="Redo"><span>Redo</span></button>
+    </div>
+    <button class="tbtn wide danger" id="clearBtn" data-icon="trash" title="Clear the page"><span>Clear page</span></button>
+  </aside>
+
+  <!-- CENTER: the board -->
+  <main id="stage">
+    <svg class="deco deco-a" viewBox="0 0 120 60" aria-hidden="true"><path d="M4 40c14-28 26 14 40-6s22-22 36 0 22 10 36-10" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+    <svg class="deco deco-b" viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3l4 12 13 1-10 8 4 13-11-8-11 8 4-13L3 16l13-1Z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/></svg>
+    <div class="status" id="status"><i></i><span id="statusText">Starting…</span></div>
+    <div id="surface"></div>
+    <button id="delSel" class="del-sel" data-icon="trash" title="Delete" hidden></button>
+
+    <form id="textCard" class="card text-card" hidden>
+      <textarea id="textInput" rows="3" placeholder="Type your text…"></textarea>
+      <div class="row">
+        <button type="button" class="btn ghost" id="textCancel">Cancel</button>
+        <button type="submit" class="btn primary">Add to board</button>
+      </div>
+    </form>
+
+    <!-- AI window -->
+    <section id="ai" class="ai" hidden>
+      <header id="aiHead">
+        <span class="ai-title"><b class="ai-dot" data-icon="sparkles"></b>AI assistant</span>
+        <button class="icon-btn" id="aiClose" data-icon="x" title="Close"></button>
+      </header>
+      <div class="ai-msgs" id="aiMsgs">
+        <div class="ai-empty" id="aiEmpty">
+          <svg viewBox="0 0 80 50" aria-hidden="true"><path d="M6 34c10-20 20 8 30-6s18-12 26 2 10 6 12 0" fill="none" stroke="#e4572e" stroke-width="3" stroke-linecap="round"/><circle cx="70" cy="12" r="4" fill="#f4b942"/></svg>
+          <p>Ask anything — type, or tap the microphone and talk.</p>
+          <p class="sub">Turn on <b>See my board</b> and the AI looks at what you drew.</p>
+        </div>
+      </div>
+      <div class="ai-opts">
+        <label class="chip"><input type="checkbox" id="aiSee"> See my board</label>
+        <label class="chip"><input type="checkbox" id="aiSpeak"> Read aloud</label>
+        <select id="aiLang" title="Voice language">
+          <option value="fr-FR">Français</option>
+          <option value="en-US">English</option>
+          <option value="ar-TN">العربية</option>
+        </select>
+      </div>
+      <form class="ai-input" id="aiForm">
+        <button type="button" class="icon-btn mic" id="aiMic" data-icon="mic" title="Talk"></button>
+        <textarea id="aiText" rows="1" placeholder="Message the AI…"></textarea>
+        <button type="submit" class="icon-btn send" data-icon="send" title="Send"></button>
+      </form>
+    </section>
+
+    <!-- Settings -->
+    <section id="settings" class="card settings" hidden>
+      <header><h3>Settings</h3><button class="icon-btn" id="setClose" data-icon="x" title="Close"></button></header>
+      <div class="set-block">
+        <h4 data-icon="usb">Connect the PC</h4>
+        <ol class="steps">
+          <li>Plug the tablet into the PC with the USB cable.</li>
+          <li>Tablet <b>Settings → Network → Hotspot &amp; tethering</b> → turn on <b>USB tethering</b>.</li>
+          <li>On the PC, double-click <b>BoardLink-PC.html</b> and type this address:</li>
+        </ol>
+        <div class="addr-list" id="addrList"><span class="muted">Looking for addresses…</span></div>
+      </div>
+      <form class="set-block" id="keyForm">
+        <h4 data-icon="key">AI (Claude API key)</h4>
+        <p class="muted small" id="keyState">Not set</p>
+        <input type="password" id="keyInput" placeholder="sk-ant-…" autocomplete="off">
+        <input type="text" id="modelInput" placeholder="Model" autocomplete="off">
+        <div class="row"><button type="submit" class="btn primary">Save</button></div>
+        <p class="muted small">Tip: it is easier to paste the key from the PC: BoardLink menu → <b>AI settings</b>.</p>
+      </form>
+    </section>
+    <div class="toast" id="toast" hidden></div>
+  </main>
+
+  <!-- RIGHT: AI + page options -->
+  <aside class="bar right">
+    <button class="tbtn ai-btn" id="aiBtn" data-icon="sparkles" title="AI assistant"><span>AI</span></button>
+    <p class="bar-label">Page</p>
+    <button class="tbtn" id="bgBtn" data-icon="grid" title="Page style"><span id="bgLabel">White</span></button>
+    <div id="videoCtl" class="vctl" hidden>
+      <button class="tbtn" id="vPlay" data-icon="play" title="Play / pause"><span>Play</span></button>
+      <button class="tbtn" id="vBack" data-icon="back" title="Back 10 s"><span>−10 s</span></button>
+      <button class="tbtn" id="vFwd" data-icon="fwd" title="Forward 10 s"><span>+10 s</span></button>
+    </div>
+    <div class="spacer"></div>
+    <button class="tbtn" id="stylusBtn" data-icon="hand" title="Ignore palm / finger touches"><span>Pen only</span></button>
+    <button class="tbtn" id="fsBtn" data-icon="maximize" title="Full screen" hidden><span>Full</span></button>
+    <button class="tbtn" id="setBtn" data-icon="gear" title="Settings"><span>Settings</span></button>
+  </aside>
+</div>
+<script src="/shared.js"></script>
+<script src="/tablet.js"></script>
+</body>
+</html>

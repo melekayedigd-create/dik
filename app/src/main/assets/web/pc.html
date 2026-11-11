@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BoardLink</title>
+<link rel="icon" href="/icons/icon-192.png">
+<link rel="stylesheet" href="/pc.css">
+</head>
+<body>
+
+<!-- ============ MAIN MENU ============ -->
+<section class="view" id="menu">
+  <!-- decoration -->
+  <svg class="deco d1" viewBox="0 0 160 70" aria-hidden="true"><path d="M5 50C25 10 40 62 62 32S100 4 120 30s26 20 34 0" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/></svg>
+  <svg class="deco d2" viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3l4 12 13 1-10 8 4 13-11-8-11 8 4-13L3 16l13-1Z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/></svg>
+  <svg class="deco d3" viewBox="0 0 60 60" aria-hidden="true"><circle cx="30" cy="30" r="24" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="6 7"/></svg>
+  <svg class="deco d4" viewBox="0 0 90 30" aria-hidden="true"><path d="M3 15h70m-14-11 14 11-14 11" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+
+  <div class="menu-wrap">
+    <header class="brand">
+      <svg class="brand-mark" viewBox="0 0 40 40" aria-hidden="true"><rect x="3" y="6" width="34" height="24" rx="5" fill="#fff" stroke="#1e2230" stroke-width="2.4"/><path d="M9 22c4-9 7 4 11-3s6-4 11 1" fill="none" stroke="#e4572e" stroke-width="3" stroke-linecap="round"/><circle cx="20" cy="35" r="2.6" fill="#e4572e"/></svg>
+      <div>
+        <h1>BoardLink</h1>
+        <p>Your tablet is the pen. This screen is the board.</p>
+      </div>
+      <div class="grow"></div>
+      <span class="pill" id="pillTab"><i></i><span id="tabText">connecting…</span></span>
+    </header>
+
+    <h2 class="section-title">What would you like to do?</h2>
+    <div class="cards">
+      <button class="card" id="goBoard">
+        <span class="tape"></span>
+        <div class="card-art board-art">
+          <svg viewBox="0 0 200 110"><path d="M22 66 C 50 18, 80 92, 110 48 S 160 28, 178 60" fill="none" stroke="#e4572e" stroke-width="6" stroke-linecap="round"/><path d="M30 90 h64" stroke="#1e2230" stroke-width="4" stroke-linecap="round"/><path d="M108 90 h30" stroke="#1e2230" stroke-width="4" stroke-linecap="round"/><circle cx="160" cy="86" r="8" fill="#2b59c3"/><rect x="138" y="14" width="40" height="22" rx="4" fill="#f4b942" opacity=".85"/></svg>
+        </div>
+        <div class="card-txt">
+          <span class="num">1</span>
+          <h3>Board</h3>
+          <p>Everything you write, draw or import on the tablet appears here, live.</p>
+          <span class="go">Open board →</span>
+        </div>
+      </button>
+      <button class="card" id="goVideo">
+        <span class="tape blue"></span>
+        <div class="card-art video-art">
+          <svg viewBox="0 0 200 110"><rect x="24" y="12" width="152" height="84" rx="9" fill="#1e2230"/><path d="M88 38 L120 54 L88 70 Z" fill="#fff"/><path d="M40 84 C 70 62, 120 102, 160 74" fill="none" stroke="#e4572e" stroke-width="5" stroke-linecap="round"/><rect x="24" y="100" width="152" height="4" rx="2" fill="#d8d2c6"/><rect x="24" y="100" width="62" height="4" rx="2" fill="#e4572e"/></svg>
+        </div>
+        <div class="card-txt">
+          <span class="num">2</span>
+          <h3>Video + draw</h3>
+          <p>Play a video from this PC or a USB drive — no internet needed — and draw on it while it plays.</p>
+          <span class="go">Choose a video →</span>
+        </div>
+      </button>
+    </div>
+
+    <div class="menu-foot">
+      <button class="link-btn" id="aiSetBtn" data-icon="sparkles"><span>AI settings</span></button>
+      <span class="dot-sep"></span>
+      <span class="muted small">Tip: in video mode press <kbd>Space</kbd> to pause and <kbd>D</kbd> to draw.</span>
+    </div>
+  </div>
+
+  <!-- AI settings dialog -->
+  <div class="modal" id="aiModal" hidden>
+    <form class="modal-card" id="aiForm">
+      <h3 data-icon="sparkles">AI settings</h3>
+      <p class="muted small">The AI window on the tablet uses Claude. Paste your API key from <b>console.anthropic.com</b>. It is saved on the tablet only.</p>
+      <label>API key <input type="password" id="aiKey" placeholder="sk-ant-…" autocomplete="off"></label>
+      <p class="muted small" id="aiKeyState"></p>
+      <label>Model <input type="text" id="aiModel" autocomplete="off"></label>
+      <div class="row"><button type="button" class="btn" id="aiCancel">Close</button><button type="submit" class="btn accent">Save</button></div>
+    </form>
+  </div>
+</section>
+
+<!-- ============ BOARD ============ -->
+<section class="view" id="board" hidden>
+  <nav class="topbar">
+    <button class="btn" data-back data-icon="left"><span>Menu</span></button>
+    <h3>Board</h3>
+    <div class="seg" id="bgSeg">
+      <button data-bg="white">White</button><button data-bg="grid">Grid</button><button data-bg="lines">Lines</button><button data-bg="dark">Chalk</button>
+    </div>
+    <div class="grow"></div>
+    <span class="mini-pill" id="boardPill"><i></i><em>tablet</em></span>
+    <button class="btn" id="boardSave" data-icon="download"><span>Save PNG</span></button>
+    <button class="btn" id="boardClear" data-icon="trash"><span>Clear</span></button>
+    <button class="btn" data-fs="#boardStage" data-icon="maximize"><span>Full screen</span></button>
+  </nav>
+  <div class="stage paper" id="boardStage">
+    <div id="boardSurface"></div>
+    <div class="empty-hint" id="boardHint">Start drawing on your tablet — it shows up here.</div>
+  </div>
+</section>
+
+<!-- ============ VIDEO ============ -->
+<section class="view" id="video" hidden>
+  <nav class="topbar">
+    <button class="btn" data-back data-icon="left"><span>Menu</span></button>
+    <h3>Video + draw</h3>
+    <label class="btn accent" data-icon="folder"><span>Open video…</span><input type="file" id="videoInput" accept="video/*,.mkv,.avi,.mov,.m4v" hidden></label>
+    <span class="file-name" id="videoName"></span>
+    <div class="grow"></div>
+    <span class="mini-pill" id="videoPill"><i></i><em>tablet</em></span>
+    <button class="btn" data-fs="#videoStage" data-icon="maximize"><span>Full screen</span></button>
+  </nav>
+  <div class="stage video-stage" id="videoStage">
+    <div class="drop" id="drop">
+      <div class="drop-icon" data-icon="film"></div>
+      <h2>Choose a video</h2>
+      <p>From this PC, a USB drive or an external disk. It plays offline.</p>
+      <label class="btn accent big"><span>Browse files…</span><input type="file" id="videoInput2" accept="video/*,.mkv,.avi,.mov,.m4v" hidden></label>
+      <p class="small muted">…or drag a video file onto this window.</p>
+    </div>
+    <video id="vid" controls playsinline hidden></video>
+
+    <div class="annot over" id="annot" hidden>
+      <div class="annot-head" id="annotHead"><span>Drawing window</span><span class="grip">drag to move · corner to resize</span></div>
+      <div class="annot-body" id="annotBody"><div id="annotSurface"></div></div>
+    </div>
+
+    <div class="annot-bar" id="annotBar" hidden>
+      <button class="ab-btn" id="abPlay" data-icon="pause" title="Play / pause (Space)"></button>
+      <span class="ab-sep"></span>
+      <div class="ab-group" id="abColors"></div>
+      <span class="ab-sep"></span>
+      <div class="ab-group" id="abSizes"></div>
+      <span class="ab-sep"></span>
+      <button class="ab-btn on" data-ptool="pen" data-icon="pen" title="Pen"></button>
+      <button class="ab-btn" data-ptool="highlighter" data-icon="highlighter" title="Highlighter"></button>
+      <button class="ab-btn" data-ptool="eraser" data-icon="eraser" title="Eraser"></button>
+      <span class="ab-sep"></span>
+      <button class="ab-btn" id="abUndo" data-icon="undo" title="Undo (PC)"></button>
+      <button class="ab-btn" id="abClear" data-icon="trash" title="Clear drawings"></button>
+      <button class="ab-btn" id="abShot" data-icon="camera" title="Save a picture (frame + drawing)"></button>
+      <button class="ab-btn" id="abMode" data-icon="window" title="Switch: draw over the video / floating window"></button>
+      <span class="ab-sep"></span>
+      <button class="ab-btn" id="abClose" data-icon="x" title="Close drawing"></button>
+    </div>
+
+    <button class="fab" id="annotBtn" data-icon="pen" title="Draw on the video (D)" hidden></button>
+  </div>
+</section>
+
+<div class="toast" id="toast" hidden></div>
+<script src="/shared.js"></script>
+<script src="/pc.js"></script>
+</body>
+</html>
